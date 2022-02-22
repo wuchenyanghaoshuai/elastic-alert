@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elastalert-rules-etg
+  namespace: monitoring
+data:
+  rule.yaml: |+
+    es_host: 192.168.23.31
+    es_port: 9200
+    name: logs-etg-land-customer
+    type: frequency
+    run_every:
+      minutes: 1
+    index: logs-etg-land-customer-*
+    num_events: 1
+    timeframe:
+      minutes: 1
+    filter:
+    - query:
+        query_string:
+          query: "customerERRORLOGDINGTALK"
+    alert:
+    - "elastalert_modules.dingtalk_alert.DingTalkAlerter"
+    dingtalk_webhook: "https://oapi.dingtalk.com/robot/send?access_token=63e5ee0e2fbe6cd2130a7583c27beb566906264fa7c4b5cc40b310e1194584d6"
+    dingtalk_msgtype: text
+    alert_text: "
+    index : {}\n
+    k8s_pod : {}\n
+    message : {}\n
+    "
+    alert_text_type: alert_text_only
+    alert_text_args:
+    - index
+    - k8s_pod
+    - message

@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elastalert4
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: elastalert4
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: elastalert4
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: base-prod
+                operator: In
+                values:
+                - base-prod
+      containers:
+      - image: registry.cn-beijing.aliyuncs.com/aoisola/elastalert:alpine-3.13
+        imagePullPolicy: IfNotPresent
+        name: elastalert4
+        command:
+          - "/bin/start"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 1024Mi
+          limits:
+            cpu: 2000m
+            memory: 4096Mi
+        volumeMounts:
+        - name: elastalert-conf-etg
+          subPath: config.yaml
+          mountPath: "/opt/conf/config.yaml"
+        - name: elastalert-rules-etg
+          subPath: rule.yaml
+          mountPath: "/opt/rules/rule.yaml"
+      volumes:
+      - name: elastalert-conf-etg
+        configMap:
+          name: elastalert-conf-etg
+      - name: elastalert-rules-etg
+        configMap:
+          name: elastalert-rules-etg

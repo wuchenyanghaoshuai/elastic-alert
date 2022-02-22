@@ -1,0 +1,253 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elastalert-rules2
+  namespace: monitoring
+data:
+  rule.yaml: |+
+    es_host: 192.168.23.30
+    es_port: 9200
+    name: kkb-marketing-md-spring
+    type: frequency
+    run_every:
+      minutes: 1
+    index: logback-*
+    num_events: 1
+    timeframe:
+      minutes: 1
+    filter:
+    - query:
+        query_string:
+          query: "service.keyword:kkb-marketing-md-spring AND ERROR"
+    alert:
+    - "elastalert_modules.dingtalk_alert.DingTalkAlerter"
+    dingtalk_webhook: "https://oapi.dingtalk.com/robot/send?access_token=3ca4ea8358bd8dc032ac4cc48fcc1f58f0dbfb255c08733fdf1bb6bd5d25523f"
+    dingtalk_msgtype: text
+    alert_text: "
+    timestamp : {}\n
+    service : {}\n
+    rest : {}\n
+    stack_trace : {}\n
+    "
+    alert_text_type: alert_text_only
+    alert_text_args:
+    - "@timestamp"
+    - service
+    - rest
+    - stack_trace
+
+  rule2.yaml: |+
+    es_host: 192.168.23.30
+    es_port: 9200
+    name: kkb-marketing-md-spring2
+    type: frequency
+    run_every:
+      minutes: 1
+    index: logback-*
+    num_events: 1
+    timeframe:
+      minutes: 1
+    filter:
+    - query:
+        query_string:
+          query: "service.keyword:gateway-service AND 访问异常"
+    alert:
+    - "elastalert_modules.dingtalk_alert.DingTalkAlerter"
+    dingtalk_webhook: "https://oapi.dingtalk.com/robot/send?access_token=3ca4ea8358bd8dc032ac4cc48fcc1f58f0dbfb255c08733fdf1bb6bd5d25523f"
+    dingtalk_msgtype: text
+    alert_text: "
+    timestamp : {}\n
+    service : {}\n
+    rest : {}\n
+    stack_trace : {}\n
+    "
+    alert_text_type: alert_text_only
+    alert_text_args:
+    - "@timestamp"
+    - service
+    - rest
+    - stack_trace
+
+  rule3.yaml: |+
+    es_host: 192.168.23.30
+    es_port: 9200
+    name: wx.kaikeba.com
+    type: frequency
+    run_every:
+      minutes: 1
+    index: wx.kaikeba.com-*
+    num_events: 1
+    timeframe:
+      minutes: 1
+    filter:
+    - query:
+        query_string:
+          query: "NOT status:200 AND NOT status:206 AND NOT status:301 AND NOT status:302 AND NOT status:304 AND NOT status:405 AND NOT status:499"
+    alert:
+    - "elastalert_modules.dingtalk_alert.DingTalkAlerter"
+    dingtalk_webhook: "https://oapi.dingtalk.com/robot/send?access_token=3d315842a8e2d5866ff50d485fdc506ec5571ff4e4e77097846552f7dd5e3664"
+    dingtalk_msgtype: text
+    alert_text: "
+    timestamp : {}\n
+    domain : {}\n
+    status : {}\n
+    request : {}\n
+    referer : {}\n
+    "
+    alert_text_type: alert_text_only
+    alert_text_args:
+    - "@timestamp"
+    - domain
+    - status
+    - request
+    - referer
+
+  rule4.yaml: |+
+    es_host: 192.168.23.30
+    es_port: 9200
+    name: kkb-plat-activity-service
+    type: frequency
+    run_every:
+      minutes: 1
+    index: logs-kkb-plat-activity-service-*
+    num_events: 1
+    timeframe:
+      minutes: 1
+    filter:
+    - query:
+        query_string:
+          query: "error"
+    alert:
+    - "elastalert_modules.dingtalk_alert.DingTalkAlerter"
+    dingtalk_webhook: "https://oapi.dingtalk.com/robot/send?access_token=351908f62b3ccb0b5b6c2a1ad0d81919f2b52594d1a50894454bb6c8dc0d3775"
+    dingtalk_msgtype: text
+    alert_text: "
+    index : {}\n
+    k8s_pod : {}\n
+    message : {}\n
+    "
+    alert_text_type: alert_text_only
+    alert_text_args:
+    - index
+    - k8s_pod
+    - message
+
+  rule5.yaml: |+
+    es_host: 192.168.23.30
+    es_port: 9200
+    name: kkb-plat-app-service
+    type: frequency
+    run_every:
+      minutes: 1
+    index: logs-kkb-plat-app-service-*
+    num_events: 1
+    timeframe:
+      minutes: 1
+    filter:
+    - query:
+        query_string:
+          query: "error"
+    alert:
+    - "elastalert_modules.dingtalk_alert.DingTalkAlerter"
+    dingtalk_webhook: "https://oapi.dingtalk.com/robot/send?access_token=351908f62b3ccb0b5b6c2a1ad0d81919f2b52594d1a50894454bb6c8dc0d3775"
+    dingtalk_msgtype: text
+    alert_text: "
+    index : {}\n
+    k8s_pod : {}\n
+    message : {}\n
+    "
+    alert_text_type: alert_text_only
+    alert_text_args:
+    - index
+    - k8s_pod
+    - message
+
+  rule6.yaml: |+
+    es_host: 192.168.23.30
+    es_port: 9200
+    name: kkb-plat-auth-service
+    type: frequency
+    run_every:
+      minutes: 1
+    index: logs-kkb-plat-auth-service-*
+    num_events: 1
+    timeframe:
+      minutes: 1
+    filter:
+    - query:
+        query_string:
+          query: "error"
+    alert:
+    - "elastalert_modules.dingtalk_alert.DingTalkAlerter"
+    dingtalk_webhook: "https://oapi.dingtalk.com/robot/send?access_token=351908f62b3ccb0b5b6c2a1ad0d81919f2b52594d1a50894454bb6c8dc0d3775"
+    dingtalk_msgtype: text
+    alert_text: "
+    index : {}\n
+    k8s_pod : {}\n
+    message : {}\n
+    "
+    alert_text_type: alert_text_only
+    alert_text_args:
+    - index
+    - k8s_pod
+    - message
+
+  rule7.yaml: |+
+    es_host: 192.168.23.30
+    es_port: 9200
+    name: kkb-plat-cms-service
+    type: frequency
+    run_every:
+      minutes: 1
+    index: logs-kkb-plat-cms-service-*
+    num_events: 1
+    timeframe:
+      minutes: 1
+    filter:
+    - query:
+        query_string:
+          query: "error"
+    alert:
+    - "elastalert_modules.dingtalk_alert.DingTalkAlerter"
+    dingtalk_webhook: "https://oapi.dingtalk.com/robot/send?access_token=351908f62b3ccb0b5b6c2a1ad0d81919f2b52594d1a50894454bb6c8dc0d3775"
+    dingtalk_msgtype: text
+    alert_text: "
+    index : {}\n
+    k8s_pod : {}\n
+    message : {}\n
+    "
+    alert_text_type: alert_text_only
+    alert_text_args:
+    - index
+    - k8s_pod
+    - message
+
+  rule8.yaml: |+
+    es_host: 192.168.23.30
+    es_port: 9200
+    name: kkb-plat-video-service
+    type: frequency
+    run_every:
+      minutes: 1
+    index: logs-kkb-plat-video-service-*
+    num_events: 1
+    timeframe:
+      minutes: 1
+    filter:
+    - query:
+        query_string:
+          query: "error"
+    alert:
+    - "elastalert_modules.dingtalk_alert.DingTalkAlerter"
+    dingtalk_webhook: "https://oapi.dingtalk.com/robot/send?access_token=351908f62b3ccb0b5b6c2a1ad0d81919f2b52594d1a50894454bb6c8dc0d3775"
+    dingtalk_msgtype: text
+    alert_text: "
+    index : {}\n
+    k8s_pod : {}\n
+    message : {}\n
+    "
+    alert_text_type: alert_text_only
+    alert_text_args:
+    - index
+    - k8s_pod
+    - message

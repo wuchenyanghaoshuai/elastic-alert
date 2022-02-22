@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elastalert2
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: elastalert2
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: elastalert2
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: base-prod
+                operator: In
+                values:
+                - base-prod
+      containers:
+      - image: registry.cn-beijing.aliyuncs.com/aoisola/elastalert:alpine-3.13
+        imagePullPolicy: IfNotPresent
+        name: elastalert2
+        command:
+          - "/bin/start"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 1024Mi
+          limits:
+            cpu: 2000m
+            memory: 4096Mi
+        volumeMounts:
+        - name: elastalert-conf2
+          subPath: config.yaml
+          mountPath: "/opt/conf/config.yaml"
+        - name: elastalert-rules2
+          subPath: rule.yaml
+          mountPath: "/opt/rules/rule.yaml"
+        - name: elastalert-rules2
+          subPath: rule2.yaml
+          mountPath: "/opt/rules/rule2.yaml"
+        - name: elastalert-rules2
+          subPath: rule3.yaml
+          mountPath: "/opt/rules/rule3.yaml"
+        - name: elastalert-rules2
+          subPath: rule4.yaml
+          mountPath: "/opt/rules/rule4.yaml"
+        - name: elastalert-rules2
+          subPath: rule5.yaml
+          mountPath: "/opt/rules/rule5.yaml"
+        - name: elastalert-rules2
+          subPath: rule6.yaml
+          mountPath: "/opt/rules/rule6.yaml"
+        - name: elastalert-rules2
+          subPath: rule7.yaml
+          mountPath: "/opt/rules/rule7.yaml"
+        - name: elastalert-rules2
+          subPath: rule8.yaml
+          mountPath: "/opt/rules/rule8.yaml"
+      volumes:
+      - name: elastalert-conf2
+        configMap:
+          name: elastalert-conf2
+      - name: elastalert-rules2
+        configMap:
+          name: elastalert-rules2

@@ -1,0 +1,245 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elastalert-rules-basic
+  namespace: monitoring
+data:
+  rule.yaml: |+
+    es_host: 192.168.23.31
+    es_port: 9200
+    name: logs-kkb-corgi
+    type: frequency
+    run_every:
+      minutes: 1
+    index: logs-kkb-corgi*
+    num_events: 1
+    timeframe:
+      minutes: 1
+    filter:
+    - query:
+        query_string:
+          query: "exception"
+    alert:
+    - "elastalert_modules.dingtalk_alert.DingTalkAlerter"
+    dingtalk_webhook: "https://oapi.dingtalk.com/robot/send?access_token=83b9acb3103342798021a1a0fce50274e3f95809412569b2b5707b53da88654d"
+    dingtalk_msgtype: text
+    alert_text: "
+    index : {}\n
+    k8s_pod : {}\n
+    message : {}\n
+    "
+    alert_text_type: alert_text_only
+    alert_text_args:
+    - index
+    - k8s_pod
+    - message
+
+  rule2.yaml: |+
+    es_host: 192.168.23.31
+    es_port: 9200
+    name: logs-kkb-sceptre
+    type: frequency
+    run_every:
+      minutes: 1
+    index: logs-kkb-sceptre*
+    num_events: 1
+    timeframe:
+      minutes: 1
+    filter:
+    - query:
+        query_string:
+          query: "exception"
+    alert:
+    - "elastalert_modules.dingtalk_alert.DingTalkAlerter"
+    dingtalk_webhook: "https://oapi.dingtalk.com/robot/send?access_token=83b9acb3103342798021a1a0fce50274e3f95809412569b2b5707b53da88654d"
+    dingtalk_msgtype: text
+    alert_text: "
+    index : {}\n
+    k8s_pod : {}\n
+    message : {}\n
+    "
+    alert_text_type: alert_text_only
+    alert_text_args:
+    - index
+    - k8s_pod
+    - message
+
+  rule3.yaml: |+
+    es_host: 192.168.23.31
+    es_port: 9200
+    name: logs-dsp-corgi-user
+    type: frequency
+    run_every:
+      minutes: 1
+    index: logs-dsp-corgi-user*
+    num_events: 1
+    timeframe:
+      minutes: 1
+    filter:
+    - query:
+        query_string:
+          query: "exception"
+    alert:
+    - "elastalert_modules.dingtalk_alert.DingTalkAlerter"
+    dingtalk_webhook: "https://oapi.dingtalk.com/robot/send?access_token=83b9acb3103342798021a1a0fce50274e3f95809412569b2b5707b53da88654d"
+    dingtalk_msgtype: text
+    alert_text: "
+    index : {}\n
+    k8s_pod : {}\n
+    message : {}\n
+    "
+    alert_text_type: alert_text_only
+    alert_text_args:
+    - index
+    - k8s_pod
+    - message
+
+  rule4.yaml: |+
+    es_host: 192.168.23.31
+    es_port: 9200
+    name: logs-notification-center
+    type: frequency
+    run_every:
+      minutes: 1
+    index: logs-notification-center-*
+    num_events: 1
+    timeframe:
+      minutes: 1
+    filter:
+    - query:
+        query_string:
+          query: "error"
+    alert:
+    - "elastalert_modules.dingtalk_alert.DingTalkAlerter"
+    dingtalk_webhook: "https://oapi.dingtalk.com/robot/send?access_token=83b9acb3103342798021a1a0fce50274e3f95809412569b2b5707b53da88654d"
+    dingtalk_msgtype: text
+    alert_text: "
+    index : {}\n
+    k8s_pod : {}\n
+    message : {}\n
+    "
+    alert_text_type: alert_text_only
+    alert_text_args:
+    - index
+    - k8s_pod
+    - message
+
+  rule5.yaml: |+
+    es_host: 192.168.23.31
+    es_port: 9200
+    name: logs-kkb-basic-api
+    type: frequency
+    run_every:
+      minutes: 1
+    index: logs-kkb-basic-api*
+    num_events: 1
+    timeframe:
+      minutes: 1
+    filter:
+    - query:
+        query_string:
+          query: "error"
+    alert:
+    - "elastalert_modules.dingtalk_alert.DingTalkAlerter"
+    dingtalk_webhook: "https://oapi.dingtalk.com/robot/send?access_token=83b9acb3103342798021a1a0fce50274e3f95809412569b2b5707b53da88654d"
+    dingtalk_msgtype: text
+    alert_text: "
+    index : {}\n
+    k8s_pod : {}\n
+    message : {}\n
+    "
+    alert_text_type: alert_text_only
+    alert_text_args:
+    - index
+    - k8s_pod
+    - message
+
+  rule6.yaml: |+
+    es_host: 192.168.23.31
+    es_port: 9200
+    name: logs-kkb-uc
+    type: frequency
+    run_every:
+      minutes: 1
+    index: logs-kkb-uc*
+    num_events: 1
+    timeframe:
+      minutes: 1
+    filter:
+    - query:
+        query_string:
+          query: "exception"
+    alert:
+    - "elastalert_modules.dingtalk_alert.DingTalkAlerter"
+    dingtalk_webhook: "https://oapi.dingtalk.com/robot/send?access_token=0053f794979b6df2c25634b540a1e2c732508b9006b760e0e4c1b23baef9b494"
+    dingtalk_msgtype: text
+    alert_text: "
+    index : {}\n
+    k8s_pod : {}\n
+    message : {}\n
+    "
+    alert_text_type: alert_text_only
+    alert_text_args:
+    - index
+    - k8s_pod
+    - message
+
+  rule7.yaml: |+
+    es_host: 192.168.23.31
+    es_port: 9200
+    name: logs-dsp-uc
+    type: frequency
+    run_every:
+      minutes: 1
+    index: logs-dsp-uc*
+    num_events: 1
+    timeframe:
+      minutes: 1
+    filter:
+    - query:
+        query_string:
+          query: "exception"
+    alert:
+    - "elastalert_modules.dingtalk_alert.DingTalkAlerter"
+    dingtalk_webhook: "https://oapi.dingtalk.com/robot/send?access_token=0053f794979b6df2c25634b540a1e2c732508b9006b760e0e4c1b23baef9b494"
+    dingtalk_msgtype: text
+    alert_text: "
+    index : {}\n
+    k8s_pod : {}\n
+    message : {}\n
+    "
+    alert_text_type: alert_text_only
+    alert_text_args:
+    - index
+    - k8s_pod
+    - message
+
+  rule8.yaml: |+
+    es_host: 192.168.23.31
+    es_port: 9200
+    name: logs-kkb-message-gateway
+    type: frequency
+    run_every:
+      minutes: 1
+    index: logs-kkb-message-gateway*
+    num_events: 1
+    timeframe:
+      minutes: 1
+    filter:
+    - query:
+        query_string:
+          query: "exception"
+    alert:
+    - "elastalert_modules.dingtalk_alert.DingTalkAlerter"
+    dingtalk_webhook: "https://oapi.dingtalk.com/robot/send?access_token=136375a29a5794360989bea01ba391efbb741549c29562ff301263e0591a4d74"
+    dingtalk_msgtype: text
+    alert_text: "
+    index : {}\n
+    k8s_pod : {}\n
+    message : {}\n
+    "
+    alert_text_type: alert_text_only
+    alert_text_args:
+    - index
+    - k8s_pod
+    - message

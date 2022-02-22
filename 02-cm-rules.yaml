@@ -1,0 +1,284 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elastalert-rules
+  namespace: monitoring
+data:
+  rule.yaml: |+
+    es_host: 192.168.23.32
+    es_port: 9200
+    name: kaikeba-learn-center
+    type: frequency
+    run_every:
+      minutes: 1
+    index: apilaravel*
+    num_events: 1
+    timeframe:
+      minutes: 1
+    filter:
+    - query:
+        query_string:
+          query: "message: *.ERROR AND message: stacktrace"
+    alert:
+    - "elastalert_modules.dingtalk_alert.DingTalkAlerter"
+    dingtalk_webhook: "https://oapi.dingtalk.com/robot/send?access_token=f9e75a4eb55f939070a543a03c375dec0e2eafbe8ea30383xxxxxxxxxxx"
+    dingtalk_msgtype: text
+    alert_text: "
+    索引 : {}\n
+    服务 : {}\n
+    主机 : {}\n
+    topic: {}\n
+    日志 : {}
+    "
+    alert_text_type: alert_text_only
+    alert_text_args:
+    - index
+    - _index
+    - agent.hostname
+    - topic
+    - message
+
+  rule2.yaml: |+
+    es_host: 192.168.23.32
+    es_port: 9200
+    name: kkb-nginx-error
+    type: frequency
+    run_every:
+      minutes: 1
+    index: nginx-error*
+    num_events: 1
+    timeframe:
+      minutes: 1
+    filter:
+    - query:
+        query_string:
+          query: "crit"
+    #      query: "sensors.kaikeba.com AND 110"
+    #      query: "NOT forbidden AND NOT peer AND NOT handshaking"
+    #      query: "NOT message: forbidden AND NOT message: peer AND NOT message: handshaking"
+    alert:
+    - "elastalert_modules.dingtalk_alert.DingTalkAlerter"
+    dingtalk_webhook: "https://oapi.dingtalk.com/robot/send?access_token=41017fbf3a96422f064b4bc39e4fdfae690aec40746a86ed94a6315c62455dc5"
+    dingtalk_msgtype: text
+    alert_text: "
+    索引 : {}\n
+    topic: {}\n
+    主机 : {}\n
+    路径 : {}\n
+    日志 : {}
+    "
+    alert_text_type: alert_text_only
+    alert_text_args:
+    - index
+    - topic
+    - agent.hostname
+    - log.file.path
+    - message
+
+  rule3.yaml: |+
+    es_host: 192.168.23.32
+    es_port: 9200
+    name: kkb-nginx-crit
+    type: frequency
+    run_every:
+      minutes: 1
+    index: nginx-error*
+    num_events: 1
+    timeframe:
+      minutes: 1
+    filter:
+    - query:
+        query_string:
+          query: "message: crit AND NOT message: handshaking"
+    alert:
+    - "elastalert_modules.dingtalk_alert.DingTalkAlerter"
+    dingtalk_webhook: "https://oapi.dingtalk.com/robot/send?access_token=69f0637e7b9a26e622a0ca0acad2e74b5a6bc0af44707ab24d9a1a8529d28c8d"
+    dingtalk_msgtype: text
+    alert_text: "
+    索引 : {}\n
+    topic: {}\n
+    主机 : {}\n
+    路径 : {}\n
+    日志 : {}
+    "
+    alert_text_type: alert_text_only
+    alert_text_args:
+    - index
+    - topic
+    - agent.hostname
+    - log.file.path
+    - message
+
+  rule4.yaml: |+
+    es_host: 192.168.23.32
+    es_port: 9200
+    name: learn-service-action
+    type: frequency
+    run_every:
+      minutes: 1
+    index: learn-service-action*
+    num_events: 1
+    timeframe:
+      minutes: 1
+    filter:
+    - query:
+        query_string:
+          query: "error AND stacktrace"
+    alert:
+    - "elastalert_modules.dingtalk_alert.DingTalkAlerter"
+    dingtalk_webhook: "https://oapi.dingtalk.com/robot/send?access_token=02fd102f0b076d6ec7dd6120b7141dd33c0d3905ca9ef8c356137c153b6dcb88"
+    dingtalk_msgtype: text
+    alert_text: "
+    索引 : {}\n
+    时间 : {}\n
+    response_status_code : {}\n
+    request_method : {}\n
+    request_host : {}\n
+    request_uri : {}\n
+    response_content : {}
+    "
+    alert_text_type: alert_text_only
+    alert_text_args:
+    - index
+    - logdate
+    - response_status_code
+    - request_method
+    - request_host
+    - request_uri
+    - response_content
+
+  rule-edu-lms-checkin-server.yaml: |+
+    es_host: 192.168.23.32
+    es_port: 9200
+    name: kkb-edu-lms-checkin-server
+    type: frequency
+    run_every:
+      minutes: 1
+    index: logs-lms-checkin-server-*
+    num_events: 1
+    timeframe:
+      minutes: 1
+    filter:
+    - query:
+        query_string:
+          query: "message: error OR message: exception"
+    alert:
+    - "elastalert_modules.dingtalk_alert.DingTalkAlerter"
+    dingtalk_webhook: "https://oapi.dingtalk.com/robot/send?access_token=e70992025dfddc47b4a8c9bbf609138cdeccc17e16ac24e827185b69725c7ee0"
+    dingtalk_msgtype: text
+    alert_text: "
+    索引 : {}\n
+    topic: {}\n
+    主机 : {}\n
+    路径 : {}\n
+    日志 : {}
+    "
+    alert_text_type: alert_text_only
+    alert_text_args:
+    - index
+    - topic
+    - agent.hostname
+    - log.file.path
+    - message
+
+  rule-edu-las-limitless-server.yaml: |+
+    es_host: 192.168.23.32
+    es_port: 9200
+    name: kkb-edu-las-limitless-server
+    type: frequency
+    run_every:
+      minutes: 1
+    index: logs-las-limitless-server-*
+    num_events: 1
+    timeframe:
+      minutes: 1
+    filter:
+    - query:
+        query_string:
+          query: "message: error OR message: exception"
+    alert:
+    - "elastalert_modules.dingtalk_alert.DingTalkAlerter"
+    dingtalk_webhook: "https://oapi.dingtalk.com/robot/send?access_token=2209e1b0670289b16e96b9f29810a52a69ceac33f9bab1687651a4a41555de6f"
+    dingtalk_msgtype: text
+    alert_text: "
+    索引 : {}\n
+    topic: {}\n
+    主机 : {}\n
+    路径 : {}\n
+    日志 : {}
+    "
+    alert_text_type: alert_text_only
+    alert_text_args:
+    - index
+    - topic
+    - agent.hostname
+    - log.file.path
+    - message
+
+  rule-edu-interaction-system.yaml: |+
+    es_host: 192.168.23.32
+    es_port: 9200
+    name: kkb-edu-interaction-system
+    type: frequency
+    run_every:
+      minutes: 1
+    index: logs-interaction-system-*
+    num_events: 1
+    timeframe:
+      minutes: 1
+    filter:
+    - query:
+        query_string:
+          query: "message: error OR message: exception"
+    alert:
+    - "elastalert_modules.dingtalk_alert.DingTalkAlerter"
+    dingtalk_webhook: "https://oapi.dingtalk.com/robot/send?access_token=73cf2e543703ae8bfd5f98c83ab0140f53a072cee6cd9aea537b822f2e0de1a3"
+    dingtalk_msgtype: text
+    alert_text: "
+    索引 : {}\n
+    topic: {}\n
+    主机 : {}\n
+    路径 : {}\n
+    日志 : {}
+    "
+    alert_text_type: alert_text_only
+    alert_text_args:
+    - index
+    - topic
+    - agent.hostname
+    - log.file.path
+    - message
+
+  rule-edu-nps-project.yaml: |+
+    es_host: 192.168.23.32
+    es_port: 9200
+    name: kkb-edu-nps-project
+    type: frequency
+    run_every:
+      minutes: 1
+    index: logs-nps-project-*
+    num_events: 1
+    timeframe:
+      minutes: 1
+    filter:
+    - query:
+        query_string:
+          query: "message: error OR message: exception"
+    alert:
+    - "elastalert_modules.dingtalk_alert.DingTalkAlerter"
+    dingtalk_webhook: "https://oapi.dingtalk.com/robot/send?access_token=1ef86c8c8c32e7e663d3f4293cbac8526c1dded48cc52e1169e563dad198944a"
+    dingtalk_msgtype: text
+    alert_text: "
+    索引 : {}\n
+    topic: {}\n
+    主机 : {}\n
+    路径 : {}\n
+    日志 : {}
+    "
+    alert_text_type: alert_text_only
+    alert_text_args:
+    - index
+    - topic
+    - agent.hostname
+    - log.file.path
+    - message
