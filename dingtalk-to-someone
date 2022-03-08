@@ -1,0 +1,115 @@
+----引入模块-------------
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+https://ding-doc.dingtalk.com/doc#/serverapi2/qf2nxq
+"""
+import json
+import datetime
+from elastalert.alerts import Alerter, BasicMatchString
+from requests.exceptions import RequestException
+from elastalert.util import elastalert_logger,EAException
+import requests
+
+import time
+import hmac
+import hashlib
+import base64
+import urllib.parse
+
+class DingTalkAlerter(Alerter):
+    
+    required_options = frozenset(['dingtalk_access_token'])
+
+    def __init__(self, rule):
+        super(DingTalkAlerter, self).__init__(rule)
+
+        self.access_token = self.rule.get('dingtalk_access_token', '')          #钉钉access_token
+        self.mobiles = self.rule.get('dingtalk_at_mobiles', [])                 #@的手机号
+
+        self.at_all = self.rule.get('dingtalk_at_all', False)                   #是否@全部
+        self.msgtype = self.rule.get('dingtalk_msgtype', 'text')                #仅支持text和markdown两种格式，默认是text
+
+    def alert(self, matches):
+        headers = {
+            'content-type': 'application/json',
+            'Accept': 'application/json;charset=utf-8',
+        }
+
+        body = self.create_alert_body(matches)
+
+        data = {
+            "at": {
+                "atMobiles":self.mobiles, 
+                "isAtAll": self.at_all,
+            },
+            "msgtype": self.msgtype,
+        }
+        if self.msgtype == 'markdown':
+            content = {
+                'title': self.create_title(matches),
+                'text': body
+            }
+        else:
+            content = {'content': body}
+        
+        data[self.msgtype] = content
+
+        webhook_url = 'https://oapi.dingtalk.com/robot/send?access_token=%s' %( self.access_token)
+
+        try:
+            response = requests.post(webhook_url, data=json.dumps(data), headers=headers)
+            response.raise_for_status()
+        except RequestException as e:
+            raise EAException("send message has error: %s" % e)
+
+    def get_info(self):
+        return {'type': "DingtalkAlerter"}
+        
+        
+        
+        
+        
+        
+ ------设置告警-------------------
+name: "bigdata-k8slog-bigdata storm ERROR日志"
+index: bigdata-k8slog-bigdata-*
+type: frequency
+
+buffer_time:
+ minutes: 1
+
+num_events: 5
+timeframe: {minutes: 1}
+
+filter:
+- query:
+    query_string:
+      query: "kubernetes.container_name: storm-worker AND message: ERROR"
+
+alert_text: "
+容器名称: {}\n
+命名空间: {}\n
+副本名称: {}\n
+所在节点: {}\n
+最近事件: {}\n
+数      量: {}
+"
+
+alert_text_type: alert_text_only
+
+alert_text_args:
+- kubernetes.container_name
+- kubernetes.namespace_name
+- kubernetes.pod_name
+- kubernetes.host
+- message
+- num_hits
+
+alert: 
+- "elastalert_modules.dingtalk_alert.DingTalkAlerter"
+
+dingtalk_access_token: "钉钉token_id"
+dingtalk_at_mobiles: ['需要被@的手机号，多个的话，以逗号分隔即可']
+dingtalk_at_all: False
+dingtalk_msgtype: "text"
