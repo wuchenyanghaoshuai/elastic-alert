@@ -1,0 +1,86 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elastalert-conf-etg-test
+  namespace: monitoring
+data:
+  config.yaml: |+
+    rules_folder: rules
+    run_every:
+      minutes: 1
+    buffer_time:
+      minutes: 2
+    es_host: 192.168.23.31
+    es_port: 9200
+    realert: 0
+    writeback_index: elastalert_status
+    writeback_alias: elastalert_alerts
+    alert_time_limit:
+      days: 1
+  dingtalk_alert.py: |+
+    #! /usr/bin/env python
+    # -*- coding: utf-8 -*-
+    """
+    https://ding-doc.dingtalk.com/doc#/serverapi2/qf2nxq
+    """
+    import json
+    import datetime
+    from elastalert.alerts import Alerter, BasicMatchString
+    from requests.exceptions import RequestException
+    from elastalert.util import elastalert_logger,EAException
+    import requests
+
+    import time
+    import hmac
+    import hashlib
+    import base64
+    import urllib.parse
+
+    class DingTalkAlerter(Alerter):
+        
+        required_options = frozenset(['dingtalk_access_token'])
+
+        def __init__(self, rule):
+            super(DingTalkAlerter, self).__init__(rule)
+
+            self.access_token = self.rule.get('dingtalk_access_token', '')          #钉钉access_token
+            self.mobiles = self.rule.get('dingtalk_at_mobiles', [])                 #@的手机号
+
+            self.at_all = self.rule.get('dingtalk_at_all', False)                   #是否@全部
+            self.msgtype = self.rule.get('dingtalk_msgtype', 'text')                #仅支持text和markdown两种格式，默认是text
+
+        def alert(self, matches):
+            headers = {
+                'content-type': 'application/json',
+                'Accept': 'application/json;charset=utf-8',
+            }
+
+            body = self.create_alert_body(matches)
+
+            data = {
+                "at": {
+                    "atMobiles":self.mobiles, 
+                    "isAtAll": self.at_all,
+                },
+                "msgtype": self.msgtype,
+            }
+            if self.msgtype == 'markdown':
+                content = {
+                    'title': self.create_title(matches),
+                    'text': body
+                }
+            else:
+                content = {'content': body}
+            
+            data[self.msgtype] = content
+
+            webhook_url = 'https://oapi.dingtalk.com/robot/send?access_token=%s' %( self.access_token)
+
+            try:
+                response = requests.post(webhook_url, data=json.dumps(data), headers=headers)
+                response.raise_for_status()
+            except RequestException as e:
+                raise EAException("send message has error: %s" % e)
+
+        def get_info(self):
+            return {'type': "DingtalkAlerter"} 
